@@ -6,7 +6,7 @@ import re
 
 #variables
 movies_originals = []
-csv_file = "./filmes.csv"
+csv_file = "./movies.csv"
 
 #functions
 def read_links(soup):
@@ -34,8 +34,11 @@ def get_original_title(links):
                 
 def read_movies(user):
     i = 1 
-    while requests.get('https://filmow.com/usuario/%s/filmes/ja-vi/?pagina=%d' % (user, i)):
-        html_doc = requests.get('https://filmow.com/usuario/%s/filmes/ja-vi/?pagina=%d' % (user, i))
+    # https://www.moviepilot.de/users/afromatte/rated/movies?page=1
+    while requests.get('https://www.moviepilot.de/users/usuario/%s/rated/movies?page=%d' % (user, i)):
+    # while requests.get('https://filmow.com/usuario/%s/filmes/ja-vi/?pagina=%d' % (user, i)):
+        html_doc = requests.get('https://www.moviepilot.de/users/usuario/%s/rated/movies?page=%d' % (user, i))
+        # html_doc = requests.get('https://filmow.com/usuario/%s/filmes/ja-vi/?pagina=%d' % (user, i))
         print("reading page %d" % i)
         i = i + 1
         soup = BeautifulSoup(html_doc.text, 'html.parser')
@@ -43,8 +46,8 @@ def read_movies(user):
         get_original_title(links)
 
 def get_info():
-    user = input("Digite o seu nome de usuário no filmow: ")
-    print("OK! A busca será feita no usuário " + user + ". Seu csv será salvo no diretório atual com o nome filmes.csv")
+    user = input("Enter your username in the filmow: ")
+    print("OK! The search will be done on the user " + user + ". Your csv will be saved in the current directory under the name movies.csv")
     
     return user
 
