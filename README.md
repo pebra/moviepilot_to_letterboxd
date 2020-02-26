@@ -13,7 +13,7 @@
 
 * Code: clone repo
     ```
-    git clone https://github.com/krumax/filmow_to_letterboxd.git
+    git clone https://github.com/krumax/moviepilot_to_letterboxd.git
     ```
 * Install packages:
     ```
