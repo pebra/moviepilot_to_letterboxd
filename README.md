@@ -1,48 +1,41 @@
-# Filmow to Letterboxd
+# Moviepilot to letterboxd converter
+## Script to log into moviepilot webpage via CLI and exporting all watched movies of a certain given user of https://www.moviepilot.de/
 
-## Gera um csv compatível com o import do Letterboxd com os filmes marcados como já vistos na conta do Filmow do usuário informado.
+### Prerequisites
 
-### (Instruções para windows)
+* Python 3
+* pip
+* credentials of your moviepilot account
+* username you want to export watched movies for
+* read https://letterboxd.com/about/importing-data (be sure about what you're trying to do, because an import might overwrite previously made letterboxd logs!!)
 
-1. Crie uma pasta para colocar o código, faça download do projeto em "Clone or download > Download ZIP", o coloque nessa pasta e extraia o arquivo. Ou clone o projeto com:
-```
-git clone https://github.com/larissamoreira/filmow_to_letterboxd.git
-```
+### Installation
 
-2. Instale Python 3 (A opção "Add Python 3.6 to PATH" deve ficar selecionada)
-    - https://www.python.org/downloads/
+* Code: clone repo
+    ```
+    git clone https://github.com/krumax/filmow_to_letterboxd.git
+    ```
+* Install packages:
+    ```
+    pip3 install -r requirements.txt 
+    ```
+* Run application
+    ```
+    python3 script.py
+    ```
 
-3. Abra o Prompt de Comando (terminal)
-    - Win+R > digite cmd > OK
+### Usage
 
-4. No terminal entre na pasta onde está o projeto, com `cd <caminho-para-pasta-criada>`. Agora é necessário instalar as dependências para o código funcionar, crie um ambiente virtual para que tudo ocorra dentro dele com:
+Run the script, enter moviepilot credentials and username you want to export watched movies for.
 
-```
-python -m venv ambiente
-```
-5. Ambiente criado, agora o ative com:
-```
-ambiente\Scripts\activate
-```
+You'll have to wait until the script has finisched scraping the pages from moviepilot. A file is creating beside the script file with the name of the user you exported movies for.
 
-6. Ambiente ativado, agora entre na pasta do projeto:
-```
-cd filmow_to_letterboxd-master
-```
+The generated csv file contains 'Title', 'Year', 'Rating10' of every watched movie from moviepilot.de
 
-7. Por fim, instale as dependências:
-```
-pip install -r requirements.txt
-```
+Final result should be a csv file, you can easily import into your letterboxd account (e.g. by creating a new list and hitting the IMPORT button).
 
-8. Hora de rodar o código, faça:
-```
-python script.py
-```
-    
-9. Ao rodar o código, você terá que informar o seu nome de usuário no filmow, então é só esperar terminar a execução do código! 
-    (Talvez demore um pouquinho! Quer dizer que você viu muitos filmes :D)
+### Troubleshooting
 
-10. Quando terminar será gerado o arquivo `./filmes.csv`, que é o seu diretório atual.
+"Moviepilot movies do not match with those from letterboxd."
 
-11. Agora é só importar o seu csv no https://letterboxd.com/. Para isso vá em Settings > IMPORT & EXPORT > IMPORT YOUR DATA
+I assume, that the titles from moviepilot.de are generally in german, but letterboxd's primary source of truth is the english/original title. You have to manually change the missing movies during importing the movies. Thats pretty easy.
