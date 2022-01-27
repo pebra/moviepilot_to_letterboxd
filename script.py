@@ -1,6 +1,7 @@
 #imports
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 import csv
 
 LOGIN_URL = "https://www.moviepilot.de/login?next="
@@ -11,7 +12,7 @@ SEARCH_URI = "https://www.moviepilot.de/users/%s/rated/movies?page=%d"
 def create_csv(user):
     with open(str(user) + '.csv', 'w', encoding='UTF-8') as f:
         writer = csv.writer(f)
-        writer.writerow(('Title','Year','Rating10'))
+        writer.writerow(('Title','Year','Rating10', 'WatchedDate'))
 
 # write to previously created csv file
 def write_to_csv(user, movie):
@@ -20,7 +21,8 @@ def write_to_csv(user, movie):
         writer.writerow((
           movie['title'],
           movie['year'],
-          movie['rating']
+          movie['rating'],
+          movie['review_date']
         ))
 
 # request movies pages for selected user as long there are movies to export
@@ -34,24 +36,31 @@ def get_movies(request, user):
        soup = BeautifulSoup(search_document._content, 'html.parser')
        scrape_movielist_and_write_to_csv(user, soup)
        no_more_movies_to_export = False
-       if (soup.find_all("li", {"class": "is-movie-wide"}) == []):
+       if (soup.select("table.table-plain-list > tbody > tr") == []):
            no_more_movies_to_export = True
        if (no_more_movies_to_export):
            break
 
 # find movie infos and write them to csv file
 def scrape_movielist_and_write_to_csv(user, soup):
-    movie = {'title': None, 'director': None, 'year': None}
-    movieslist = soup.find_all("li", {"class": "is-movie-wide"})
-    for movie in movieslist:
-        movie['title'] = movie.find("img").get("alt")
-        date = movie.find_all("span", {"class": "production_info"})
-        for d in date:
-            chunk = d.get_text()
-            date = [int(s) for s in chunk.split() if s.isdigit()]
-            movie['year'] = date[0]
-        for rating in movie.select(".rating-value"):
-            movie['rating'] = rating.get("title")
+    movie = {'title': None, 'year': None, 'rating': None, 'review_date': None}
+    movieslist = soup.select("table.table-plain-list > tbody > tr")
+    for m in movieslist:
+        table_data = m.find_all("td")
+
+        # get title
+        movie['title'] = table_data[0].get_text().split("\n")[2].strip()
+
+        # get year
+        movie['year'] = table_data[0].get_text().split("\n")[4].split(" ")[-1].strip()
+
+        # get rating
+        movie['rating'] = table_data[1].get_text().strip()
+
+        # get review date
+        german_date = table_data[2].get_text().strip()
+        movie['review_date'] = datetime.strptime(german_date, "%d.%m.%Y").strftime("%Y-%m-%d")
+
         write_to_csv(user, movie)
 
 # get moviepilot login
