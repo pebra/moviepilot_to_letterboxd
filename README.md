@@ -1,3 +1,7 @@
+### Update 2021-01-27
+I forked this project since moviepilot's website structure seems to have changed from using a table structure instead of a list to display the movie ratings.
+
+
 # Moviepilot to letterboxd converter
 ## Script to log into moviepilot webpage via CLI and exporting all watched movies of a certain given user of https://www.moviepilot.de/
 
