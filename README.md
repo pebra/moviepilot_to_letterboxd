@@ -1,4 +1,4 @@
-### Update 2021-01-27
+### Update 2022-01-27
 I forked this project since moviepilot's website structure seems to have changed from using a table structure instead of a list to display the movie ratings.
 
 
